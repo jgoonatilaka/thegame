@@ -1,0 +1,64 @@
+python3 rpgUnitTest.py
+Welcome to the Garbage Game!
+Choose your player:
+1. Wizard
+2. Soldier
+3. Elf
+Choose your player: 2
+
+Your player:
+Player Type: Soldier
+Your Total Health: 20
+Weapon: Sword (Damage: 15)
+Armor: PlateArmor (Defense: 10)
+Time to Lose!
+
+ Enemies:
+1. Demon Monkey (Health: 30)
+2. The Big Bear Man (Health: 20)
+3. The SoundCloud Rapper (Health: 40)
+Choose an enemy: 1
+
+You are fighting Demon Monkey!
+
+Demon Monkey's Health: 30
+Janidu's Health: 20
+What do you want to do?
+1. Attack
+2. View Inventory
+What will you do? 1
+You attack Demon Monkey with your Sword, dealing 15 damage!
+Demon Monkey attacks you, 8 damage!
+
+Demon Monkey's Health: 15
+Janidu's Health: 12
+What do you want to do?
+1. Attack
+2. View Inventory
+What will you do? 1
+You attack Demon Monkey with your Sword, dealing 15 damage!
+Demon Monkey lost, you won!
+You got 10 janiduCoin (The garbage game currency) from Demon Monkey.
+
+What would you like to do now?
+1. Fight another enemy
+2. View inventory
+3. Exit game
+Enter your choice: 3
+bye
+..F.
+======================================================================
+FAIL: test_game_flow (__main__.TestGame.test_game_flow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/janidugoonatilaka/anaconda3/lib/python3.11/unittest/mock.py", line 1375, in patched
+    return func(*newargs, **newkeywargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/janidugoonatilaka/Documents/thegame/rpgUnitTest.py", line 65, in test_game_flow
+    self.assertIn("You are now fighting", output)
+AssertionError: 'You are now fighting' not found in 'Welcome to the Garbage Game!\nChoose your player:\n1. Wizard\n2. Soldier\n3. Elf\n\nYour player:\nPlayer Type: Wizard\nYour Total Health: 15\nWeapon: Staff (Damage: 10)\nArmor: Robe (Defense: 5)\nTime to Lose!\n\n Enemies:\n1. Demon Monkey (Health: 0)\n2. The Big Bear Man (Health: 20)\n3. The SoundCloud Rapper (Health: 40)\n\nYou are fighting Demon Monkey!\n'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+FAILED (failures=1)
