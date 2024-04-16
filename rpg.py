@@ -1,3 +1,4 @@
+import json
 import random
 
 class Weapon:
@@ -57,6 +58,11 @@ class Player:
         else:
             print("Your inventory is empty.")
 
+    def saveInventory(self):
+        with open(f"{self.name}_inventory.json", 'w') as file:
+            json.dump(self.inventory, file, indent=4)
+        print("Inventory saved successfully.")
+
 class Enemy:
     def __init__(self, name, health, damageRange, lootTable):
         self.name = name
@@ -70,11 +76,12 @@ class Enemy:
     def dropLoot(self):
         return self.lootTable
 
+# List of enemies
 enemies = [
-    Enemy("Demon Monkey", 30, (5, 7, 8), {"janiduCoin (The garbage game currency)": 10, "Golden Banana (Gives you monkey powers)": 1, "Monkey Tail (Acts like a whip)": 1}),
-    Enemy("The Big Bear Man", 20, (4, 6, 10), {"janiduCoin (The garbage game currency)": 10, "Bear Claw (Like the Donut)": 1, "Pooh's Hunny (Give it back man)": 1}),
-    Enemy("The SoundCloud Rapper", 40, (7, 12), {"janiduCoin (The garbage game currency)": 10, "Mixtape (You can now use autotune!)": 1, "EP (You are now a real rapper)": 1}),
-    Enemy("Elon Musk", 100 (1,2,3), {"janiduCoin (The garbage game currency)":100, "Tesla (insane whip)":1, "X (twitter but worse)": 1, "BOSS COIN (You're Done with the Game)":1})
+    Enemy("Demon Monkey", 30, (5, 7, 8), {"janiduCoin": 10, "Golden Banana": 1, "Monkey Tail": 1}),
+    Enemy("The Big Bear Man", 20, (4, 6, 10), {"janiduCoin": 10, "Bear Claw": 1, "Pooh's Hunny": 1}),
+    Enemy("The SoundCloud Rapper", 40, (7, 12), {"janiduCoin": 10, "Mixtape": 1, "EP": 1}),
+    Enemy("Elon Musk", 100, (1, 2, 3), {"janiduCoin": 100, "Tesla": 1, "X": 1, "BOSS COIN": 1})
 ]
 
 def mainMenu():
@@ -83,39 +90,35 @@ def mainMenu():
     print("1. Wizard")
     print("2. Soldier")
     print("3. Elf")
-    
     playerTypeChoice = input("Choose your player: ")
     playerTypeDict = {"1": "wizard", "2": "soldier", "3": "elf"}
-    
     playerType = playerTypeDict.get(playerTypeChoice)
-    
     if playerType:
         player = Player(name="Janidu", playerType=playerType)
         showPlayerDetails(player)
         selectEnemyAndFight(player)
     else:
-        print("try again")
+        print("Invalid choice, try again.")
         mainMenu()
 
 def showPlayerDetails(player):
-    print("\nYour player:")
+    print("\nYour player details:")
     print(f"Player Type: {player.playerType.capitalize()}")
     print(f"Your Total Health: {player.health}")
     print(f"Weapon: {player.weapon.name} (Damage: {player.weapon.damage})")
     print(f"Armor: {player.armor.name} (Defense: {player.armor.defense})")
-    print("Time to Lose!")
+    print("You are now ready to begin your adventure!")
 
 def selectEnemyAndFight(player):
-    print("\n Enemies:")
+    print("\nEnemies:")
     for i, enemy in enumerate(enemies, 1):
         print(f"{i}. {enemy.name} (Health: {enemy.health})")
-    
     enemyChoice = input("Choose an enemy: ")
     enemyIndex = int(enemyChoice) - 1
     if 0 <= enemyIndex < len(enemies):
         battle(player, enemies[enemyIndex])
     else:
-        print("try again")
+        print("Invalid choice, try again.")
         selectEnemyAndFight(player)
 
 def battle(player, enemy):
@@ -126,43 +129,36 @@ def battle(player, enemy):
         print("What do you want to do?")
         print("1. Attack")
         print("2. View Inventory")
-        
         choice = input("What will you do? ")
-        
         if choice == "1":
             damage = player.weapon.damage
             enemy.health -= damage
             print(f"You attack {enemy.name} with your {player.weapon.name}, dealing {damage} damage!")
-            
             if enemy.health <= 0:
-                print(f"{enemy.name} lost, you won!")
+                print(f"{enemy.name} has been defeated!")
                 loot = random.choice(list(enemy.dropLoot().items()))
                 player.addItemToInventory(loot[0], loot[1])
                 print(f"You got {loot[1]} {loot[0]} from {enemy.name}.")
                 postBattleMenu(player)
                 break
-            
             enemyDamage = enemy.dealDamage()
             player.health -= enemyDamage
-            print(f"{enemy.name} attacks you, {enemyDamage} damage!")
-            
+            print(f"{enemy.name} attacks you, dealing {enemyDamage} damage!")
             if player.health <= 0:
-                print("You lost loser")
-                
+                print("You have been defeated.")
         elif choice == "2":
             player.showInventory()
         else:
-            print("try again")
-    
+            print("Invalid choice, try again.")
     if player.health <= 0:
-        print("\nGame Over")
+        print("\nGame Over.")
 
 def postBattleMenu(player):
     print("\nWhat would you like to do now?")
     print("1. Fight another enemy")
     print("2. View inventory")
-    print("3. Exit game")
-    
+    print("3. Save inventory")
+    print("4. Exit game")
     choice = input("Enter your choice: ")
     if choice == "1":
         selectEnemyAndFight(player)
@@ -170,9 +166,12 @@ def postBattleMenu(player):
         player.showInventory()
         postBattleMenu(player)
     elif choice == "3":
-        print("bye")
+        player.saveInventory()
+        postBattleMenu(player)
+    elif choice == "4":
+        print("Thanks for playing! Goodbye.")
     else:
-        print("try again")
+        print("Invalid choice, try again.")
         postBattleMenu(player)
 
 mainMenu()
