@@ -74,6 +74,7 @@ enemies = [
     Enemy("Demon Monkey", 30, (5, 7, 8), {"janiduCoin (The garbage game currency)": 10, "Golden Banana (Gives you monkey powers)": 1, "Monkey Tail (Acts like a whip)": 1}),
     Enemy("The Big Bear Man", 20, (4, 6, 10), {"janiduCoin (The garbage game currency)": 10, "Bear Claw (Like the Donut)": 1, "Pooh's Hunny (Give it back man)": 1}),
     Enemy("The SoundCloud Rapper", 40, (7, 12), {"janiduCoin (The garbage game currency)": 10, "Mixtape (You can now use autotune!)": 1, "EP (You are now a real rapper)": 1}),
+    Enemy("Elon Musk", 100 (1,2,3), {"janiduCoin (The garbage game currency)":100, "Tesla (insane whip)":1, "X (twitter but worse)": 1, "BOSS COIN (You're Done with the Game)":1})
 ]
 
 def mainMenu():
