@@ -11,53 +11,45 @@ class Armor:
         self.defense = defense
 
 class Player:
-    def __init__(self, name, player_type):
+    def __init__(self, name, playerType):
         self.name = name
-        self.player_type = player_type
-        self.health = self.totalHealth(player_type)
-        self.weapon = self.choose_weapon(player_type)
-        self.armor = self.choose_armor(player_type)
-        self.inventory = {}  
+        self.playerType = playerType
+        self.health = self.totalHealth(playerType)
+        self.weapon = self.chooseWeapon(playerType)
+        self.armor = self.chooseArmor(playerType)
+        self.inventory = {}
 
-    def choose_weapon(self, player_type):
-        if player_type == "wizard":
+    def chooseWeapon(self, playerType):
+        if playerType == "wizard":
             return Weapon("Staff", 10)
-        elif player_type == "soldier":
+        elif playerType == "soldier":
             return Weapon("Sword", 15)
-        elif player_type == "elf":
+        elif playerType == "elf":
             return Weapon("Wand", 5)
 
-    def choose_armor(self, player_type):
-        if player_type == "wizard":
+    def chooseArmor(self, playerType):
+        if playerType == "wizard":
             return Armor("Robe", 5)
-        elif player_type == "soldier":
+        elif playerType == "soldier":
             return Armor("PlateArmor", 10)
-        elif player_type == "elf":
+        elif playerType == "elf":
             return Armor("Cloak", 3)
     
-    def totalHealth(self, player_type):
-        if player_type == "wizard":
-            self.health = 15
-        elif player_type == "soldier":
-            self.health = 20
-        elif player_type == "elf":
-            self.health = 13
+    def totalHealth(self, playerType):
+        if playerType == "wizard":
+            return 15
+        elif playerType == "soldier":
+            return 20
+        elif playerType == "elf":
+            return 13
 
-    def add_item_to_inventory(self, item_name, quantity=1):
-        if item_name in self.inventory:
-            self.inventory[item_name] += quantity
+    def addItemToInventory(self, itemName, quantity=1):
+        if itemName in self.inventory:
+            self.inventory[itemName] += quantity
         else:
-            self.inventory[item_name] = quantity
+            self.inventory[itemName] = quantity
 
-    def remove_item_from_inventory(self, item_name, quantity=1):
-        if item_name in self.inventory and self.inventory[item_name] >= quantity:
-            self.inventory[item_name] -= quantity
-            if self.inventory[item_name] <= 0:
-                del self.inventory[item_name]
-            return True
-        return False
-
-    def show_inventory(self):
+    def showInventory(self):
         if self.inventory:
             print(f"{self.name}'s Inventory:")
             for item, quantity in self.inventory.items():
@@ -65,55 +57,121 @@ class Player:
         else:
             print("Your inventory is empty.")
 
-
 class Enemy:
     def __init__(self, name, health, damageRange, lootTable):
         self.name = name
         self.health = health
-        self.damage_range = damageRange
-        self.loot_table = lootTable
+        self.damageRange = damageRange
+        self.lootTable = lootTable
 
-    def deal_damage(self):
-        return random.choice(self.damage_range)
+    def dealDamage(self):
+        return random.choice(self.damageRange)
 
-    def drop_loot(self):
-        return self.loot_table
-
-
-
-#List of enemies: Name, 
+    def dropLoot(self):
+        return self.lootTable
 
 enemies = [
-    Enemy("Demon Monkey", 30, (5, 7, 8), {"janiduCoin": 10, "Golden Banana": 1, "Monkey Tail": 1, "Demon Soul or something idk": 1, "another item": 1, "im running out of ideas": 1, "what do you call these": 1, "potion i guess": 1, "banana 2": 1, "another banana": 1}),
+    Enemy("Demon Monkey", 30, (5, 7, 8), {"janiduCoin (The garbage game currency)": 10, "Golden Banana (Gives you monkey powers)": 1, "Monkey Tail (Acts like a whip)": 1}),
+    Enemy("The Big Bear Man", 20, (4, 6, 10), {"janiduCoin (The garbage game currency)": 10, "Bear Claw (Like the Donut)": 1, "Pooh's Hunny (Give it back man)": 1}),
+    Enemy("The SoundCloud Rapper", 40, (7, 12), {"janiduCoin (The garbage game currency)": 10, "Mixtape (You can now use autotune!)": 1, "EP (You are now a real rapper)": 1}),
 ]
 
-
-def main_menu():
+def mainMenu():
     print("Welcome to the Garbage Game!")
     print("Choose your player:")
     print("1. Wizard")
     print("2. Soldier")
     print("3. Elf")
     
-    player_type_choice = input("choose your player: ")
-    player_type_dict = {"1": "wizard", "2": "soldier", "3": "elf"}
+    playerTypeChoice = input("Choose your player: ")
+    playerTypeDict = {"1": "wizard", "2": "soldier", "3": "elf"}
     
-    player_type = player_type_dict.get(player_type_choice)
+    playerType = playerTypeDict.get(playerTypeChoice)
     
-    if player_type:
-        player = Player(name="Janidu", player_type=player_type)
-        show_player_details(player)
+    if playerType:
+        player = Player(name="Janidu", playerType=playerType)
+        showPlayerDetails(player)
+        selectEnemyAndFight(player)
     else:
         print("try again")
-        main_menu()
+        mainMenu()
 
-def show_player_details(player):
-    print("\nYour character details:")
-    print(f"Player Type: {player.player_type.capitalize()}")
+def showPlayerDetails(player):
+    print("\nYour player:")
+    print(f"Player Type: {player.playerType.capitalize()}")
     print(f"Your Total Health: {player.health}")
     print(f"Weapon: {player.weapon.name} (Damage: {player.weapon.damage})")
     print(f"Armor: {player.armor.name} (Defense: {player.armor.defense})")
-    print("You are now ready to begin your adventure!")
+    print("Time to Lose!")
 
-if __name__ == "__main__":
-    main_menu()
+def selectEnemyAndFight(player):
+    print("\n Enemies:")
+    for i, enemy in enumerate(enemies, 1):
+        print(f"{i}. {enemy.name} (Health: {enemy.health})")
+    
+    enemyChoice = input("Choose an enemy: ")
+    enemyIndex = int(enemyChoice) - 1
+    if 0 <= enemyIndex < len(enemies):
+        battle(player, enemies[enemyIndex])
+    else:
+        print("try again")
+        selectEnemyAndFight(player)
+
+def battle(player, enemy):
+    print(f"\nYou are fighting {enemy.name}!")
+    while player.health > 0 and enemy.health > 0:
+        print(f"\n{enemy.name}'s Health: {enemy.health}")
+        print(f"{player.name}'s Health: {player.health}")
+        print("What do you want to do?")
+        print("1. Attack")
+        print("2. View Inventory")
+        
+        choice = input("What will you do? ")
+        
+        if choice == "1":
+            damage = player.weapon.damage
+            enemy.health -= damage
+            print(f"You attack {enemy.name} with your {player.weapon.name}, dealing {damage} damage!")
+            
+            if enemy.health <= 0:
+                print(f"{enemy.name} lost, you won!")
+                loot = random.choice(list(enemy.dropLoot().items()))
+                player.addItemToInventory(loot[0], loot[1])
+                print(f"You got {loot[1]} {loot[0]} from {enemy.name}.")
+                postBattleMenu(player)
+                break
+            
+            enemyDamage = enemy.dealDamage()
+            player.health -= enemyDamage
+            print(f"{enemy.name} attacks you, {enemyDamage} damage!")
+            
+            if player.health <= 0:
+                print("You lost loser")
+                
+        elif choice == "2":
+            player.showInventory()
+        else:
+            print("try again")
+    
+    if player.health <= 0:
+        print("\nGame Over")
+
+def postBattleMenu(player):
+    print("\nWhat would you like to do now?")
+    print("1. Fight another enemy")
+    print("2. View inventory")
+    print("3. Exit game")
+    
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        selectEnemyAndFight(player)
+    elif choice == "2":
+        player.showInventory()
+        postBattleMenu(player)
+    elif choice == "3":
+        print("bye")
+    else:
+        print("try again")
+        postBattleMenu(player)
+
+mainMenu()
