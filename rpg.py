@@ -136,9 +136,10 @@ def battle(player, enemy):
             print(f"You attack {enemy.name} with your {player.weapon.name}, dealing {damage} damage!")
             if enemy.health <= 0:
                 print(f"{enemy.name} has been defeated!")
-                loot = random.choice(list(enemy.dropLoot().items()))
-                player.addItemToInventory(loot[0], loot[1])
-                print(f"You got {loot[1]} {loot[0]} from {enemy.name}.")
+                loot = enemy.dropLoot()
+                for item, quantity in loot.items():
+                    player.addItemToInventory(item, quantity)
+                    print("Open Inventory to see dropped loot")
                 postBattleMenu(player)
                 break
             enemyDamage = enemy.dealDamage()
