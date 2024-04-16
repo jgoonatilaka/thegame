@@ -129,6 +129,7 @@ def battle(player, enemy):
         print("What do you want to do?")
         print("1. Attack")
         print("2. View Inventory")
+        print("3. Run away like a baby")
         choice = input("What will you do? ")
         if choice == "1":
             damage = player.weapon.damage
@@ -149,6 +150,10 @@ def battle(player, enemy):
                 print("You have been defeated.")
         elif choice == "2":
             player.showInventory()
+
+        elif choice == "3":
+            print("You ran away")
+            postBattleMenu(player)
         else:
             print("Invalid choice, try again.")
     if player.health <= 0:
